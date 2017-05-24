@@ -1,2 +1,14 @@
 <h1>Bienvenido</h1>
 <p>Este es el home page de la aplicación</p>
+
+<div>
+  <% if current_user  %>
+    <div>
+      Haz entrado como: <%=current_user.email %>
+      <%= link_to "cerrar sesion", log_out_path %>
+    </div>
+  <%else%>
+    <%= link_to "Registrate", sign_up_path %> or
+    <%= link_to "Inicia sesion", log_in_path %>
+  <%end%>
+</div>
