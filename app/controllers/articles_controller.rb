@@ -15,7 +15,7 @@ class ArticlesController < ApplicationController
 
   # GET /articles/new
   def new
-    @article = Article.new
+    @article = Article.new(author: cookies[:author], description: cookies[:description], name: cookies[:name])
   end
 
   # GET /articles/1/edit
@@ -29,6 +29,15 @@ class ArticlesController < ApplicationController
 
     respond_to do |format|
       if @article.save
+        if params[:article][:remember]
+          cookies[:author] = @article.author
+          cookies[:description] = @article.description
+          cookies[:name] = @article.name
+        else
+          cookies.delete(:author)
+          cookies.delete(:description)
+          cookies.delete(:name)
+        end
         format.html { redirect_to @article, notice: 'Article was successfully created.' }
         format.json { render :show, status: :created, location: @article }
       else
@@ -70,6 +79,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:name, :description, :author)
+      params.require(:article).permit(:name, :description, :author, :remember)
     end
 end
